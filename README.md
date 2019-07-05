@@ -1,4 +1,4 @@
-# crud
+# directives
 
 > A Vue.js project
 
