@@ -20,7 +20,7 @@ export default {
 
 <style>
   header{
-    background-color: aqua;
+    background: linear-gradient(purple, black);
     display: flex;
     flex-direction: column;
   }
@@ -37,9 +37,12 @@ export default {
 
   a{
     font-size: 38px;
+    border: 3px solid white;
+    color: white
   }
 
   body{
+    background: linear-gradient(white, gray) no-repeat center center fixed;
     font-family: Helvetica, Arial, sans-serif;
     margin: 0;
   }
