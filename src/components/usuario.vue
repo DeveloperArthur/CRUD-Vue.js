@@ -1,16 +1,34 @@
 <template>
     <div>
-        <button class="btn btn-primary" @click="mostrarTelaAdicionar">Adicionar</button>
-        <button class="btn btn-primary" @click="mostrarTelaExcluir">Excluir</button>
-        <button class="btn btn-primary" @click="mostrarTelaAlterar">Alterar</button>
-        <button class="btn btn-primary" @click="mostrarTelaBuscar">Buscar</button>
-
+        <button class="btn btn-primary" @click="mostrarTelaAdicionar">Tela de adicionar</button>
+        <button class="btn btn-primary" @click="mostrarTelaExcluir">Tela de excluir</button>
+        <button class="btn btn-primary" @click="mostrarTelaAlterar">Tela de alterar</button>
+        <button class="btn btn-primary" @click="mostrarTelaBuscar">tela de buscar</button>
+        <hr>
         <div id="adicionar" v-if="telaAdicionar">
-            <p>Adicionar</p>
+            {{usuarios}}
+            <form>
+                <p>Nome:</p>
+                <input v-model="nomeUsuario" type="text" placeholder="Digite o nome" style="width:200px; height:30px;">
+                <br><br>
+                <p>Data de nascimento:</p>
+                <input v-model="dataUsuario" type="date" style="width:200px; height:30px;">
+                <br><br>
+                <p>Email:</p>
+                <input v-model="emailUsuario" type="email" placeholder="Digite o email" style="width:200px; height:30px;">
+                <br><br>
+                <p>Departamento:</p>
+                <select v-model="departamentoUsuario" style="width:200px; height:30px;">
+                    <option v-for="i in departamento">{{ i }}</option>
+                </select>
+                <br><br>
+                <button class="btn btn-success" @click="adicionar">Adicionar</button>
+            </form>
         </div>
 
         <div id="excluir" v-if="telaExcluir">
-            <p>Excluir</p>
+            <input type="text" placeholder="ID para excluir">
+            <button class="btn btn-danger">Excluir</button>
         </div>
 
         <div id="alterar" v-if="telaAlterar">
@@ -30,7 +48,20 @@ export default {
             telaAdicionar: false,
             telaExcluir: false,
             telaAlterar: false,
-            telaBuscar: false
+            telaBuscar: false,
+            departamento: ['Suporte', 'Salesforce', 'Desenvolvimento'],
+            usuarios:{
+                id: [],
+                nome: [],
+                data: [],
+                email: [],
+                departamento: []
+            },
+            i: 0,
+            nomeUsuario: '',
+            dataUsuario: '',
+            emailUsuario: '',
+            departamentoUsuario: ''
         }
     },
     methods: {
@@ -57,6 +88,14 @@ export default {
             this.telaAdicionar = false;
             this.telaAlterar = false;
             this.telaExcluir = false;
+        },
+        adicionar(){
+            this.usuarios.id.push(this.i++);
+            this.usuarios.nome.push(this.nomeUsuario);
+            this.usuarios.data.push(this.dataUsuario);
+            this.usuarios.email.push(this.emailUsuario);
+            this.usuarios.departamento.push(this.departamentoUsuario);
+            alert('Usuario adicionado');
         }
     }
 }
