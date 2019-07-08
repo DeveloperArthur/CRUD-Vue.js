@@ -22,6 +22,9 @@
                 </select>
                 <br><br>
                 <button class="btn btn-success" @click="adicionar">Adicionar</button>
+                <h3 style="color: red; font-size: 15px">
+                    <strong>{{ erroInputVazioAdicionar }}</strong>
+                </h3> 
             </form>
         </div>
 
@@ -40,7 +43,7 @@
             <input type="text" placeholder="ID para Alterar" v-model="alterarID"  style="width:200px; height:30px;"/>
             <button class="btn btn-secondary" @click="procurarUsuarioParaAlterar">Procurar</button>
             <h3 style="color: red; font-size: 15px">
-                <strong>{{ erroAlterar }}</strong>
+                <strong>{{ erroAoProcurar }}</strong>
             </h3>
             <p>{{ nomeAtual }}</p>
             <p>{{ dataAtual }}</p>
@@ -63,11 +66,14 @@
                 </select>
                 <br><br>
                 <button class="btn btn-warning" @click="alterar">Alterar</button>
+                <h3 style="color: red; font-size: 15px">
+                    <strong>{{erroInputVazioAlterar}}</strong>
+                </h3>
             </div>
         </div>
 
         <div id="buscar" v-if="telaBuscar">
-            <input type="text" placeholder="Digite o ID p/ alteracao" v-model="buscarID" />
+            <input type="text" placeholder="Digite o ID p/ alteração" v-model="buscarID" />
             <button class="btn btn-secondary" @click="pesquisar">Procurar</button>
             <h3 style="color: red; font-size: 15px">
                 <strong>{{ erroPesquisa }}</strong>
@@ -120,14 +126,16 @@ export default {
             emailPesquisa: '',
             departamentoPesquisa: '',
             alterarID: 0,
-            erroAlterar: '',
+            erroAoProcurar: '',
             nomeAtual: '',
             departamentoAtual: '',
             emailAtual: '',
             dataAtual: '',
             novoNome: '',
             novaData: '',
-            novoEmail: ''
+            novoEmail: '',
+            erroInputVazioAdicionar: '',
+            erroInputVazioAlterar: ''
         }
     },
     methods: {
@@ -156,16 +164,21 @@ export default {
             this.telaExcluir = false;
         },
         adicionar(){
-            this.usuarios.id.push(this.i++);
-            this.usuarios.nome.push(this.nomeUsuario);
-            this.usuarios.data.push(this.dataUsuario);
-            this.usuarios.email.push(this.emailUsuario);
-            this.usuarios.departamento.push(this.departamentoUsuario);
-            alert('Usuario adicionado');
-            this.nomeUsuario = '';
-            this.dataUsuario = '';
-            this.emailUsuario = '';
-            this.departamentoUsuario = '';
+            if(this.nomeUsuario.length == 0 || this.dataUsuario.length == 0 || this.emailUsuario.length == 0 || this.departamentoUsuario.length == 0){
+                this.erroInputVazioAdicionar = "Preencha todos os campos";
+            }else{
+                this.erroInputVazioAdicionar = "";
+                this.usuarios.id.push(this.i++);
+                this.usuarios.nome.push(this.nomeUsuario);
+                this.usuarios.data.push(this.dataUsuario);
+                this.usuarios.email.push(this.emailUsuario);
+                this.usuarios.departamento.push(this.departamentoUsuario);
+                alert('Usuario adicionado');
+                this.nomeUsuario = '';
+                this.dataUsuario = '';
+                this.emailUsuario = '';
+                this.departamentoUsuario = '';
+            }
         },
         excluir(){
             if(this.usuarios.id.length == 0){
@@ -208,9 +221,12 @@ export default {
             }
         },
         procurarUsuarioParaAlterar(){
+            if(this.usuarios.id.length == 0){
+                this.erroAoProcurar = 'Usuario inexistente';
+            }
             for (var i = 0; i < this.usuarios.id.length; i++) {
                 if (this.usuarios.id[i] == this.alterarID) {
-                    this.erroAlterar = "";
+                    this.erroAoProcurar = "";
                     this.nomeAtual = "Nome: "+this.usuarios.nome[i];
                     this.dataAtual = "Data do cadastro: "+this.usuarios.data[i];
                     this.emailAtual = "Email: "+this.usuarios.email[i];
@@ -221,27 +237,32 @@ export default {
                     this.dataAtual = "";
                     this.emailAtual = "";
                     this.departamentoAtual = "";
-                    this.erroAlterar = "Usuario nao encontrado";
+                    this.erroAoProcurar = "Usuario nao encontrado";
                 }
             }
         },
         alterar(){
-            for (var i = 0; i < this.usuarios.id.length; i++) {
-                if (this.usuarios.id[i] == this.alterarID) {
-                    this.usuarios.nome[i] = this.novoNome;
-                    this.usuarios.data[i] = this.novaData;
-                    this.usuarios.email[i] = this.novoEmail;
-                    this.usuarios.departamento[i] = this.novoDepartamento;
-                    this.nomeAtual = "";
-                    this.departamentoAtual = "";
-                    this.emailAtual = "";
-                    this.dataAtual = "";
-                    this.novoNome = "";
-                    this.novaData = "";
-                    this.novoEmail = "";
-                    this.novoDepartamento = "";
-                    alert('Campos alterados');
-                    break;
+            if(this.novoNome.length == 0 || this.novaData.length == 0 || this.novoEmail.length == 0 || this.novoDepartamento.length == 0){
+                this.erroInputVazioAlterar = "Preencha todos os campos"
+            }else{
+                for (var i = 0; i < this.usuarios.id.length; i++) {
+                    if (this.usuarios.id[i] == this.alterarID) {
+                        this.usuarios.nome[i] = this.novoNome;
+                        this.usuarios.data[i] = this.novaData;
+                        this.usuarios.email[i] = this.novoEmail;
+                        this.usuarios.departamento[i] = this.novoDepartamento;
+                        this.nomeAtual = "";
+                        this.departamentoAtual = "";
+                        this.emailAtual = "";
+                        this.dataAtual = "";
+                        this.novoNome = "";
+                        this.novaData = "";
+                        this.novoEmail = "";
+                        this.novoDepartamento = "";
+                        this.erroInputVazioAlterar = "";
+                        alert('Campos alterados');
+                        break;
+                    }
                 }
             }
         }
