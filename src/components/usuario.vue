@@ -66,9 +66,6 @@
                 </select>
                 <br><br>
                 <button class="btn btn-warning" @click="alterar">Alterar</button>
-                <h3 style="color: red; font-size: 15px">
-                    <strong>{{erroInputVazioAlterar}}</strong>
-                </h3>
             </div>
         </div>
 
@@ -243,7 +240,7 @@ export default {
         },
         alterar(){
             if(this.novoNome.length == 0 || this.novaData.length == 0 || this.novoEmail.length == 0 || this.departamentoUsuario.length == 0){
-                this.erroInputVazioAlterar = "Preencha todos os campos"
+                alert("Preencha todos os campos");
             }else{
                 for (var i = 0; i < this.usuarios.id.length; i++) {
                     if (this.usuarios.id[i] == this.alterarID) {
