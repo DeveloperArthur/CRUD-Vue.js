@@ -242,7 +242,7 @@ export default {
             }
         },
         alterar(){
-            if(this.novoNome.length == 0 || this.novaData.length == 0 || this.novoEmail.length == 0 || this.novoDepartamento.length == 0){
+            if(this.novoNome.length == 0 || this.novaData.length == 0 || this.novoEmail.length == 0 || this.departamentoUsuario.length == 0){
                 this.erroInputVazioAlterar = "Preencha todos os campos"
             }else{
                 for (var i = 0; i < this.usuarios.id.length; i++) {
@@ -250,7 +250,7 @@ export default {
                         this.usuarios.nome[i] = this.novoNome;
                         this.usuarios.data[i] = this.novaData;
                         this.usuarios.email[i] = this.novoEmail;
-                        this.usuarios.departamento[i] = this.novoDepartamento;
+                        this.usuarios.departamento[i] = this.departamentoUsuario;
                         this.nomeAtual = "";
                         this.departamentoAtual = "";
                         this.emailAtual = "";
@@ -258,7 +258,7 @@ export default {
                         this.novoNome = "";
                         this.novaData = "";
                         this.novoEmail = "";
-                        this.novoDepartamento = "";
+                        this.departamentoUsuario = "";
                         this.erroInputVazioAlterar = "";
                         alert('Campos alterados');
                         break;
@@ -278,5 +278,3 @@ export default {
         width: 100%;
     }
 </style>
-
-
