@@ -1,9 +1,9 @@
 <template>
     <div>
-        <button class="btn btn-primary" @click="mostrarTelaAdicionar">Tela de adicionar</button>
-        <button class="btn btn-primary" @click="mostrarTelaExcluir">Tela de excluir</button>
-        <button class="btn btn-primary" @click="mostrarTelaAlterar">Tela de alterar</button>
-        <button class="btn btn-primary" @click="mostrarTelaBuscar">Tela de buscar</button>
+        <button class="btn btn-secondary" @click="mostrarTelaAdicionar">Tela de adicionar</button>
+        <button class="btn btn-secondary" @click="mostrarTelaExcluir">Tela de excluir</button>
+        <button class="btn btn-secondary" @click="mostrarTelaAlterar">Tela de alterar</button>
+        <button class="btn btn-secondary" @click="mostrarTelaBuscar">Tela de buscar</button>
         <hr>
         <div id="adicionar" v-if="telaAdicionar">
             <form>
@@ -21,7 +21,7 @@
                     <option v-for="i in departamento">{{ i }}</option>
                 </select>
                 <br><br>
-                <button class="btn btn-success" @click="adicionar">Adicionar</button>
+                <button class="btn btn-primary" @click="adicionar">Adicionar</button>
                 <h3 style="color: red; font-size: 15px">
                     <strong>{{ erroInputVazioAdicionar }}</strong>
                 </h3> 
@@ -53,18 +53,26 @@
             <div>
                 <p>Digite o novo nome</p>
                 <input type="text" placeholder="novo nome" v-model="novoNome"  style="width:200px; height:30px;"/>
-                <br><br>
+                <h3 style="color: red; font-size: 15px">
+                    <strong>{{ erroNovoNome }}</strong>
+                </h3>
                 <p>Digite a nova data</p>
                 <input type="date" placeholder="nova data" v-model="novaData"  style="width:200px; height:30px;"/>
-                <br><br>
+                <h3 style="color: red; font-size: 15px">
+                    <strong>{{ erroNovaData }}</strong>
+                </h3>
                 <p>Digite o novo email</p>
                 <input type="text" placeholder="novo email" v-model="novoEmail"  style="width:200px; height:30px;">
-                <br><br>
+                <h3 style="color: red; font-size: 15px">
+                    <strong>{{ erroNovoEmail }}</strong>
+                </h3>
                 <p>Digite o novo departamento</p>
                 <select v-model="departamentoUsuario" style="width:200px; height:30px;">
                     <option v-for="i in departamento">{{ i }}</option>
                 </select>
-                <br><br>
+                <h3 style="color: red; font-size: 15px">
+                    <strong>{{ erroNovoDepartamento }}</strong>
+                </h3>
                 <button class="btn btn-warning" @click="alterar">Alterar</button>
             </div>
         </div>
@@ -132,7 +140,10 @@ export default {
             novaData: '',
             novoEmail: '',
             erroInputVazioAdicionar: '',
-            erroInputVazioAlterar: ''
+            erroNovoNome: '',
+            erroNovaData: '',
+            erroNovoEmail: '',
+            erroNovoDepartamento: ''
         }
     },
     methods: {
@@ -239,9 +250,25 @@ export default {
             }
         },
         alterar(){
-            if(this.novoNome.length == 0 || this.novaData.length == 0 || this.novoEmail.length == 0 || this.departamentoUsuario.length == 0){
-                alert("Preencha todos os campos");
+            if(this.alterarID == 0){
+                alert('Busque o ID que deseja alterar');
+            }
+            if(this.novoNome.length == 0){
+                this.erroNovoNome = "Preencha o nome";
+            } 
+            if(this.novaData.length == 0){
+                this.erroNovaData = "Preencha a data";
+            } 
+            if(this.novoEmail.length == 0){
+                this.erroNovoEmail = "Preencha o email";
+            }
+            if(this.departamentoUsuario.length == 0){
+                this.erroNovoDepartamento = "Preencha o departamento";  
             }else{
+                this.erroNovoNome = "";
+                this.erroNovaData = "";
+                this.erroNovoEmail = "";
+                this.erroNovoDepartamento = "";
                 for (var i = 0; i < this.usuarios.id.length; i++) {
                     if (this.usuarios.id[i] == this.alterarID) {
                         this.usuarios.nome[i] = this.novoNome;

@@ -68,9 +68,9 @@
       <strong>{{ exibirErro }}</strong>
     </h3>
     <hr />
-    <button class="btn btn-danger" v-if="departamentos.id != 0" @click="esconderExcluir">Excluir</button>
-    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderAlterar">Alterar</button>
-    <button class="btn btn-info" v-if="departamentos.id != 0" @click="esconderPesquisa">Pesquisar</button>
+    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderExcluir">Tela de excluir</button>
+    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderAlterar">Tela de alterar</button>
+    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderPesquisa">Tela de pesquisar</button>
   </div>
 </template>
 
