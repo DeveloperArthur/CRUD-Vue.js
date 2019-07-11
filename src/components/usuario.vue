@@ -18,7 +18,7 @@
                 <br><br>
                 <p>Departamento:</p>
                 <select v-model="departamentoUsuario" style="width:200px; height:30px;">
-                    <option v-for="i in departamento">{{ i }}</option>
+                    <option v-for="i in departamentosCadastrados">{{ i }}</option>
                 </select>
                 <br><br>
                 <button class="btn btn-primary" @click="adicionar">Adicionar</button>
@@ -68,7 +68,7 @@
                 </h3>
                 <p>Digite o novo departamento</p>
                 <select v-model="departamentoUsuario" style="width:200px; height:30px;">
-                    <option v-for="i in departamento">{{ i }}</option>
+                    <option v-for="i in departamentosCadastrados">{{ i }}</option>
                 </select>
                 <h3 style="color: red; font-size: 15px">
                     <strong>{{ erroNovoDepartamento }}</strong>
@@ -110,13 +110,13 @@ export default {
             telaAlterar: false,
             telaBuscar: false,
             departamento: ['Suporte', 'Salesforce', 'Desenvolvimento'],
-            usuarios:{
+            /*usuarios:{
                 id: [],
                 nome: [],
                 data: [],
                 email: [],
                 departamento: []
-            },
+            }*/
             i: 1,
             nomeUsuario: '',
             dataUsuario: '',
@@ -176,11 +176,11 @@ export default {
                 this.erroInputVazioAdicionar = "Preencha todos os campos";
             }else{
                 this.erroInputVazioAdicionar = "";
-                this.usuarios.id.push(this.i++);
-                this.usuarios.nome.push(this.nomeUsuario);
-                this.usuarios.data.push(this.dataUsuario);
-                this.usuarios.email.push(this.emailUsuario);
-                this.usuarios.departamento.push(this.departamentoUsuario);
+                this.$store.state.usuarios.id.push(this.i++);
+                this.$store.state.usuarios.nome.push(this.nomeUsuario);
+                this.$store.state.usuarios.data.push(this.dataUsuario);
+                this.$store.state.usuarios.email.push(this.emailUsuario);
+                this.$store.state.usuarios.departamento.push(this.departamentoUsuario);
                 alert('Usuario adicionado');
                 this.nomeUsuario = '';
                 this.dataUsuario = '';
@@ -189,17 +189,17 @@ export default {
             }
         },
         excluir(){
-            if(this.usuarios.id.length == 0){
+            if(this.$store.state.usuarios.id.length == 0){
                 this.erroExcluir = 'Usuario nao encontrado';
             }
-            for (var i = 0; i < this.usuarios.id.length; i++) {
-                if (this.usuarios.id[i] == this.excluirID) {
+            for (var i = 0; i < this.$store.state.usuarios.id.length; i++) {
+                if (this.$store.state.usuarios.id[i] == this.excluirID) {
                     this.erroExcluir = '';
-                    this.usuarios.id[i] = null;
-                    this.usuarios.nome[i] = null;
-                    this.usuarios.data[i] = null;
-                    this.usuarios.email[i] = null;
-                    this.usuarios.departamento[i] = null;
+                    this.$store.state.usuarios.id[i] = null;
+                    this.$store.state.usuarios.nome[i] = null;
+                    this.$store.state.usuarios.data[i] = null;
+                    this.$store.state.usuarios.email[i] = null;
+                    this.$store.state.usuarios.departamento[i] = null;
                     alert('Usuario excluido!');
                     break;
                 }else{
@@ -208,16 +208,16 @@ export default {
             }
         },
         pesquisar(){
-            if(this.usuarios.id.length == 0){
+            if(this.$store.state.usuarios.id.length == 0){
                 this.erroPesquisa = 'Usuario inexistente';
             }
-            for (var i = 0; i < this.usuarios.id.length; i++) {
-                if (this.usuarios.id[i] == this.buscarID) {
+            for (var i = 0; i < this.$store.state.usuarios.id.length; i++) {
+                if (this.$store.state.usuarios.id[i] == this.buscarID) {
                     this.erroPesquisa = "";
-                    this.nomePesquisa = this.usuarios.nome[i];
-                    this.dataPesquisa = this.usuarios.data[i];
-                    this.emailPesquisa = this.usuarios.email[i];
-                    this.departamentoPesquisa = this.usuarios.departamento[i];
+                    this.nomePesquisa = this.$store.state.usuarios.nome[i];
+                    this.dataPesquisa = this.$store.state.usuarios.data[i];
+                    this.emailPesquisa = this.$store.state.usuarios.email[i];
+                    this.departamentoPesquisa = this.$store.state.usuarios.departamento[i];
                     break;
                 } else {
                     this.erroPesquisa = "Usuario inexistente";
@@ -229,16 +229,16 @@ export default {
             }
         },
         procurarUsuarioParaAlterar(){
-            if(this.usuarios.id.length == 0){
+            if(this.$store.state.usuarios.id.length == 0){
                 this.erroAoProcurar = 'Usuario inexistente';
             }
-            for (var i = 0; i < this.usuarios.id.length; i++) {
-                if (this.usuarios.id[i] == this.alterarID) {
+            for (var i = 0; i < this.$store.state.usuarios.id.length; i++) {
+                if (this.$store.state.usuarios.id[i] == this.alterarID) {
                     this.erroAoProcurar = "";
-                    this.nomeAtual = "Nome: "+this.usuarios.nome[i];
-                    this.dataAtual = "Data do cadastro: "+this.usuarios.data[i];
-                    this.emailAtual = "Email: "+this.usuarios.email[i];
-                    this.departamentoAtual = "Departamento: "+this.usuarios.departamento[i];
+                    this.nomeAtual = "Nome: "+this.$store.state.usuarios.nome[i];
+                    this.dataAtual = "Data do cadastro: "+this.$store.state.usuarios.data[i];
+                    this.emailAtual = "Email: "+this.$store.state.usuarios.email[i];
+                    this.departamentoAtual = "Departamento: "+this.$store.state.usuarios.departamento[i];
                     break;
                 }else{
                     this.nomeAtual = "";
@@ -269,12 +269,12 @@ export default {
                 this.erroNovaData = "";
                 this.erroNovoEmail = "";
                 this.erroNovoDepartamento = "";
-                for (var i = 0; i < this.usuarios.id.length; i++) {
-                    if (this.usuarios.id[i] == this.alterarID) {
-                        this.usuarios.nome[i] = this.novoNome;
-                        this.usuarios.data[i] = this.novaData;
-                        this.usuarios.email[i] = this.novoEmail;
-                        this.usuarios.departamento[i] = this.departamentoUsuario;
+                for (var i = 0; i < this.$store.state.usuarios.id.length; i++) {
+                    if (this.$store.state.usuarios.id[i] == this.alterarID) {
+                        this.$store.state.usuarios.nome[i] = this.novoNome;
+                        this.$store.state.usuarios.data[i] = this.novaData;
+                        this.$store.state.usuarios.email[i] = this.novoEmail;
+                        this.$store.state.usuarios.departamento[i] = this.departamentoUsuario;
                         this.nomeAtual = "";
                         this.departamentoAtual = "";
                         this.emailAtual = "";
@@ -289,6 +289,14 @@ export default {
                     }
                 }
             }
+        }
+    },
+    computed:{
+        usuarios(){
+            return this.$store.state.usuarios;
+        },
+        departamentosCadastrados(){
+            return this.$store.state.todosDepartamentos;
         }
     }
 }

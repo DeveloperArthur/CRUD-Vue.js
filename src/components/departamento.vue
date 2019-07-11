@@ -50,7 +50,7 @@
     </div>
 
     <!-- ADICIONAR -->
-    <p style="color: red" v-if="departamentos.id == 0">*Nenhum departamento cadastrado*</p>
+    <p style="color: red" v-if="$store.state.departamentos.id == 0">*Nenhum departamento cadastrado*</p>
     <form id="formularioDepartamento" v-if="telaAdicionar">
       <p id="nome">Departamento:</p>
       <input v-model="nomeDepartamento" placeholder="Digite o departamento" type="text" />
@@ -78,11 +78,11 @@
 export default {
   data() {
     return {
-      departamentos: {
+      /*departamentos: {
         id: [],
         nome: [],
         descricao: []
-      },
+      },*/
       nomeDepartamento: "",
       descricaoDepartamento: "",
       exibirErro: "",
@@ -111,20 +111,22 @@ export default {
         this.exibirErro = "Preencha todos os campos!!";
       } else {
         this.exibirErro = "";
-        this.departamentos.id.push(this.i++);
-        this.departamentos.nome.push(this.nomeDepartamento);
-        this.departamentos.descricao.push(this.descricaoDepartamento);
+        this.$store.state.departamentos.id.push(this.i++);
+        this.$store.state.departamentos.nome.push(this.nomeDepartamento);
+        this.$store.state.departamentos.descricao.push(this.descricaoDepartamento);
+        this.$store.state.todosDepartamentos.push(this.nomeDepartamento);
+        console.log(this.$store.state.todosDepartamentos);
         alert("Departamento adicionado!");
         this.nomeDepartamento = "";
         this.descricaoDepartamento = "";
       }
     },
     pesquisar() {
-      for (var i = 0; i < this.departamentos.id.length; i++) {
-        if (this.departamentos.id[i] == this.buscarID) {
+      for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
+        if (this.$store.state.departamentos.id[i] == this.buscarID) {
             this.erroPesquisa = "";
-            this.pesquisaDepartamento = this.departamentos.nome[i];
-            this.pesquisaDescricao = this.departamentos.descricao[i];
+            this.pesquisaDepartamento = this.$store.state.departamentos.nome[i];
+            this.pesquisaDescricao = this.$store.state.departamentos.descricao[i];
             break;
         } else {
             this.erroPesquisa = "Departamento nao encontrado";
@@ -140,12 +142,12 @@ export default {
       this.telaAlterar = false;
     },
     excluir(){
-        for (var i = 0; i < this.departamentos.id.length; i++) {
-            if (this.departamentos.id[i] == this.excluirID) {
+        for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
+            if (this.$store.state.departamentos.id[i] == this.excluirID) {
                 this.erroExcluir = "";
-                this.departamentos.id[i] = null;
-                this.departamentos.nome[i] = null;
-                this.departamentos.descricao[i] = null;
+                this.$store.state.departamentos.id[i] = null;
+                this.$store.state.departamentos.nome[i] = null;
+                this.$store.state.departamentos.descricao[i] = null;
                 alert('Departamento excluido!');
                 break;
             }else{
@@ -166,11 +168,11 @@ export default {
         this.telaAdicionar = !this.telaAdicionar;
     },
     alterar(){
-        for (var i = 0; i < this.departamentos.id.length; i++) {
-            if (this.departamentos.id[i] == this.alterarID) {
+        for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
+            if (this.$store.state.departamentos.id[i] == this.alterarID) {
                 this.erroAlterar = "";
-                this.descricaoAtualAlterar = "Descrição: "+this.departamentos.descricao[i];
-                this.departamentoAtualAlterar = "Departamento: "+this.departamentos.nome[i];
+                this.descricaoAtualAlterar = "Descrição: "+this.$store.state.departamentos.descricao[i];
+                this.departamentoAtualAlterar = "Departamento: "+this.$store.state.departamentos.nome[i];
                 break;
             }else{
                 this.descricaoAtualAlterar = "";
@@ -180,10 +182,10 @@ export default {
         }
     },
     alterarCampos(){
-        for (var i = 0; i < this.departamentos.id.length; i++) {
-            if (this.departamentos.id[i] == this.alterarID) {
-                this.departamentos.descricao[i] = this.novaDescricao;
-                this.departamentos.nome[i] = this.novoDepartamento;
+        for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
+            if (this.$store.state.departamentos.id[i] == this.alterarID) {
+                this.$store.state.departamentos.descricao[i] = this.novaDescricao;
+                this.$store.state.departamentos.nome[i] = this.novoDepartamento;
                 this.descricaoAtualAlterar = "";
                 this.departamentoAtualAlterar = "";
                 this.novaDescricao = "";
@@ -192,6 +194,11 @@ export default {
                 break;
             }
         }
+    }
+  },
+  computed:{
+    departamentos(){
+      return this.$store.state.departamentos;
     }
   }
 };
