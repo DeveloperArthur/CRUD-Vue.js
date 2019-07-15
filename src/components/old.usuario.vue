@@ -1,4 +1,4 @@
-/*<template>
+<template>
     <div>
         <button class="btn btn-secondary" @click="mostrarTelaAdicionar">Tela de adicionar</button>
         <button class="btn btn-secondary" @click="mostrarTelaExcluir">Tela de excluir</button>
@@ -309,4 +309,4 @@ export default {
     table{
         width: 70%;
     }
-</style>*/
+</style>
