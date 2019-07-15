@@ -145,7 +145,6 @@ export default {
         this.$store.state.departamentos.nome.push(this.nomeDepartamento);
         this.$store.state.departamentos.descricao.push(this.descricaoDepartamento);
         this.$store.state.todosDepartamentos.push(this.nomeDepartamento);
-        console.log(this.$store.state.todosDepartamentos);
         //alert("Departamento adicionado!");
         this.nomeDepartamento = "";
         this.descricaoDepartamento = "";
@@ -257,5 +256,3 @@ input{
   width: 885px
 }
 </style>
-
-
