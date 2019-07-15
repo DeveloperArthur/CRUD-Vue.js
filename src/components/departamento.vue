@@ -1,76 +1,84 @@
 <template>
-  <div>
-    <!-- PESQUISA -->
-    <div id="pesquisa" v-if="telaPesquisa">
-      <input type="text" placeholder="Digite o ID" v-model="buscarID" />
-      <button class="btn btn-secondary" @click="pesquisar">Buscar</button>
-      <h3 style="color: red; font-size: 15px">
-        <strong>{{ erroPesquisa }}</strong>
-      </h3>
+  <div align="center" id="tudo">
+    <div v-if="mostrarAlterar">
+      <form>
+        <td><input v-model="nomeDepartamento" placeholder="Digite o departamento" type="text" /></td>
+        <td><input type="text" placeholder="Digite a descricao" v-model="descricaoDepartamento" /></td>
+        <td><button class="btn btn-primary" @click="adicionar()">Adicionar</button></td>
+        <h3 style="color: red; font-size: 15px">
+          <strong>{{ exibirErro }}</strong>
+        </h3>
+      </form>
+      <hr />
+      <td><input id="inputBusca" v-model="pesquisa" placeholder="Digite o que deseja buscar" type="text" /></td>
+      <td><button class="btn btn-secondary" @click="pesquisar">Buscar</button></td>
+      <br>
+      <table border="1" v-if="esconderTabelaPrincipal">
+        <tr>
+          <th>ID</th>
+          <th>Departamento</th>
+          <th>Descrição</th>
+          <th>Aplicações</th>
+        </tr>
+        <tr v-for="(id, index) in $store.state.departamentos.id">
+          <td>{{id}}</td>
+          <td>{{$store.state.departamentos.nome[index]}}</td>
+          <td>{{$store.state.departamentos.descricao[index]}}</td>
+          <td>
+            <button class="btn btn-success" @click="mostrarTelaAlterar(index)">Alterar</button>
+            <button class="btn btn-danger" @click="excluir(index)">Excluir</button>
+          </td>
+        </tr>
+      </table>
+
+      <table border="1" v-if="!esconderTabelaPrincipal">
+        <p>Resultado da busca: </p>
+        <tr>
+          <th>ID</th>
+          <th>Departamento</th>
+          <th>Descrição</th>
+          <th>Aplicações</th>
+        </tr>
+        <tr v-if="pesquisaAchou">
+          <td>{{pesquisaId}}</td>
+          <td>{{pesquisaDepartamento}}</td>
+          <td>{{pesquisaDescricao}}</td>
+          <td>
+            <button class="btn btn-success" @click="mostrarTelaAlterarNaBusca()">Alterar</button>
+            <button class="btn btn-danger" @click="excluirNaPesquisa()">Excluir</button>
+          </td>
+        </tr>
+        <h3 style="color: red; font-size: 15px" v-if="!pesquisaAchou">
+          <strong>{{ erroPesquisa }}</strong>
+        </h3>
+      </table>  
+    </div>
+    
+    <!-- TELA DE ALTERAÇÃO -->
+    <div v-if="!mostrarAlterar">
       <table border="1">
         <tr>
+          <th>ID</th>
           <th>Departamento</th>
           <th>Descrição</th>
         </tr>
         <tr>
-          <td>{{pesquisaDepartamento}}</td>
-          <td>{{pesquisaDescricao}}</td>
+          <td>{{idAtualAlterar}}</td>
+          <td>{{departamentoAtualAlterar}}</td>
+          <td>{{descricaoAtualAlterar}}</td>
         </tr>
       </table>
-    </div>
-
-    <!-- EXCLUIR -->
-    <div id="excluir" v-if="telaExcluir">
-      <input type="text" placeholder="ID para excluir" v-model="excluirID" />
-      <button class="btn btn-danger" @click="excluir">Excluir</button>
-      <h3 style="color: red; font-size: 15px">
-        <strong>{{ erroExcluir }}</strong>
-      </h3>
-    </div>
-
-    <!-- ALTERAR -->
-    <div id="alterar" v-if="telaAlterar">
-      <input type="text" placeholder="ID para Alterar" v-model="alterarID" />
-      <button class="btn btn-secondary" @click="alterar">Buscar</button>
-      <h3 style="color: red; font-size: 15px">
-        <strong>{{ erroAlterar }}</strong>
-      </h3>
-      <h3>{{ departamentoAtualAlterar }}</h3>
-      <h3>{{ descricaoAtualAlterar }}</h3>
       <hr>
       <div>
-          <p>Digite a alteração para Departamento</p>
-          <input type="text" placeholder="Alteração departamento" v-model="novoDepartamento" />
-          <br>
-          <p>Digite a alteração para descrição</p>
-          <input type="text" placeholder="Alteração descrição" v-model="novaDescricao" />
+          <input type="text" placeholder="Alterar Departamento" v-model="novoDepartamento" />
           <br><br>
-          <button class="btn btn-warning" @click="alterarCampos">Alterar</button>
+          <input type="text" placeholder="Alterar Descrição" v-model="novaDescricao" />
+          <h3 style="color: red; font-size: 15px">
+            <strong>{{ erroAlterar }}</strong>
+          </h3>
+          <button class="btn btn-warning" @click="alterar">Alterar</button>
       </div>
     </div>
-
-    <!-- ADICIONAR -->
-    <p style="color: red" v-if="$store.state.departamentos.id == 0">*Nenhum departamento cadastrado*</p>
-    <form id="formularioDepartamento" v-if="telaAdicionar">
-      <p id="nome">Departamento:</p>
-      <input v-model="nomeDepartamento" placeholder="Digite o departamento" type="text" />
-      <br />
-      <br />
-      <p id="descricao">Descrição:</p>
-      <input type="text" placeholder="Digite a descricao" v-model="descricaoDepartamento" />
-      <br />
-      <br />
-      <button class="btn btn-primary" @click="adicionar()">Adicionar</button>
-    </form>
-
-    <!-- BOTOES -->
-    <h3 style="color: red; font-size: 15px">
-      <strong>{{ exibirErro }}</strong>
-    </h3>
-    <hr />
-    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderExcluir">Tela de excluir</button>
-    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderAlterar">Tela de alterar</button>
-    <button class="btn btn-secondary" v-if="departamentos.id != 0" @click="esconderPesquisa">Tela de pesquisar</button>
   </div>
 </template>
 
@@ -89,8 +97,25 @@ export default {
       i: 1,
       pesquisaDepartamento: "",
       pesquisaDescricao: "",
+      pesquisa: '',
+      erroPesquisa: "",
+      departamentoAtualAlterar: "",
+      descricaoAtualAlterar: "",
+      novoDepartamento: "",
+      novaDescricao: "",
+      esconderTabelaPrincipal: true,
+      pesquisaId: 0,
+      pesquisaAchou: false,
+      mostrarAlterar: true,
+      idAtualAlterar : ""
+      /*nomeDepartamento: "",
+      descricaoDepartamento: "",
+      exibirErro: "",
+      i: 1,
+      pesquisaDepartamento: "",
+      pesquisaDescricao: "",
       telaPesquisa: false,
-      buscarID: 0,
+      pesquisa: '',
       erroPesquisa: "",
       excluirID: 0,
       erroExcluir: '',
@@ -102,7 +127,12 @@ export default {
       erroAlterar: "",
       alterarID: 0,
       novoDepartamento: "",
-      novaDescricao: ""
+      novaDescricao: "",
+      esconderTabelaPrincipal: true,
+      pesquisaId: 0,
+      pesquisaAchou: false,
+      mostrarAlterar: true,
+      idAtualAlterar : ""*/
     };
   },
   methods: {
@@ -116,84 +146,92 @@ export default {
         this.$store.state.departamentos.descricao.push(this.descricaoDepartamento);
         this.$store.state.todosDepartamentos.push(this.nomeDepartamento);
         console.log(this.$store.state.todosDepartamentos);
-        alert("Departamento adicionado!");
+        //alert("Departamento adicionado!");
         this.nomeDepartamento = "";
         this.descricaoDepartamento = "";
       }
     },
     pesquisar() {
-      for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
-        if (this.$store.state.departamentos.id[i] == this.buscarID) {
-            this.erroPesquisa = "";
-            this.pesquisaDepartamento = this.$store.state.departamentos.nome[i];
-            this.pesquisaDescricao = this.$store.state.departamentos.descricao[i];
-            break;
-        } else {
-            this.erroPesquisa = "Departamento nao encontrado";
-            this.pesquisaDepartamento = "";
-            this.pesquisaDescricao = "";
+      if(this.pesquisa.length == 0){
+        alert('Digite algo no campo de pesquisa');
+      }else{
+        this.esconderTabelaPrincipal = !this.esconderTabelaPrincipal;
+        if(this.$store.state.departamentos.id.length == 0){
+          this.erroPesquisa = "Departamento nao encontrado";
+        }else{
+          for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
+            if (this.$store.state.departamentos.id[i] == this.pesquisa || 
+              this.$store.state.departamentos.nome[i] == this.pesquisa ||
+              this.$store.state.departamentos.descricao[i] == this.pesquisa) {
+              this.pesquisaAchou = !this.pesquisaAchou;
+              this.erroPesquisa = "";
+              this.pesquisaId = this.$store.state.departamentos.id[i];
+              this.pesquisaDepartamento = this.$store.state.departamentos.nome[i];
+              this.pesquisaDescricao = this.$store.state.departamentos.descricao[i];
+              break;
+            } else {
+              this.pesquisaAchou = false;
+              this.erroPesquisa = "Departamento nao encontrado";
+              this.pesquisaDepartamento = "";
+              this.pesquisaDescricao = "";
+            }
+          }
         }
       }
     },
-    esconderPesquisa() {
-      this.telaPesquisa = !this.telaPesquisa;
-      this.telaExcluir = false;
-      this.telaAdicionar = !this.telaAdicionar;
-      this.telaAlterar = false;
-    },
-    excluir(){
-        for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
-            if (this.$store.state.departamentos.id[i] == this.excluirID) {
-                this.erroExcluir = "";
-                this.$store.state.departamentos.id[i] = null;
-                this.$store.state.departamentos.nome[i] = null;
-                this.$store.state.departamentos.descricao[i] = null;
-                alert('Departamento excluido!');
-                break;
-            }else{
-                this.erroExcluir = "Departamento nao encontrado";
-            }
-        }
-    },
-    esconderExcluir(){
-        this.telaExcluir = !this.telaExcluir;
-        this.telaPesquisa = false;
-        this.telaAdicionar = !this.telaAdicionar;
-        this.telaAlterar = false;
-    },
-    esconderAlterar(){
-        this.telaAlterar = !this.telaAlterar;
-        this.telaExcluir = false;
-        this.telaPesquisa = false;
-        this.telaAdicionar = !this.telaAdicionar;
+    excluir(index){
+      if(confirm('Tem certeza que deseja excluir este departamento?')){
+        this.$store.state.departamentos.id.splice(index, 1);
+        this.$store.state.departamentos.nome.splice(index, 1);
+        this.$store.state.departamentos.descricao.splice(index, 1);
+        this.esconderTabelaPrincipal = true;
+			}else{
+        alert('Operação cancelada');
+			} 
     },
     alterar(){
-        for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
-            if (this.$store.state.departamentos.id[i] == this.alterarID) {
-                this.erroAlterar = "";
-                this.descricaoAtualAlterar = "Descrição: "+this.$store.state.departamentos.descricao[i];
-                this.departamentoAtualAlterar = "Departamento: "+this.$store.state.departamentos.nome[i];
-                break;
-            }else{
-                this.descricaoAtualAlterar = "";
-                this.departamentoAtualAlterar = "";
-                this.erroAlterar = "Departamento nao encontrado";
-            }
+      if(this.novoDepartamento.length == 0 || this.novaDescricao.length == 0){
+        this.erroAlterar = 'Preencha todos os campos!';
+      }else{
+        this.erroAlterar = '';
+        for(var i=0; i<this.$store.state.departamentos.id.length; i++){
+          if(this.$store.state.departamentos.nome[i] == this.departamentoAtualAlterar &&
+            this.$store.state.departamentos.descricao[i] == this.descricaoAtualAlterar){
+            this.$store.state.departamentos.nome[i] = this.novoDepartamento;
+            this.$store.state.departamentos.descricao[i] = this.novaDescricao;
+            alert('Campos alterados');
+            this.mostrarAlterar = true;    
+          }
         }
+      }
     },
-    alterarCampos(){
-        for (var i = 0; i < this.$store.state.departamentos.id.length; i++) {
-            if (this.$store.state.departamentos.id[i] == this.alterarID) {
-                this.$store.state.departamentos.descricao[i] = this.novaDescricao;
-                this.$store.state.departamentos.nome[i] = this.novoDepartamento;
-                this.descricaoAtualAlterar = "";
-                this.departamentoAtualAlterar = "";
-                this.novaDescricao = "";
-                this.novoDepartamento = "";
-                alert('Campos alterados');
-                break;
-            }
+    mostrarTelaAlterar(index){
+      this.mostrarAlterar = !this.mostrarAlterar;
+      this.idAtualAlterar = this.$store.state.departamentos.id[index];
+      this.departamentoAtualAlterar = this.$store.state.departamentos.nome[index];
+      this.descricaoAtualAlterar = this.$store.state.departamentos.descricao[index];
+    },
+    mostrarTelaAlterarNaBusca(){
+      this.mostrarAlterar = !this.mostrarAlterar;
+      for(var i=0; i<this.$store.state.departamentos.id.length; i++){
+        if(this.$store.state.departamentos.nome[i] == this.pesquisaDepartamento && 
+           this.$store.state.departamentos.descricao[i] == this.pesquisaDescricao){
+             this.idAtualAlterar = this.$store.state.departamentos.id[i];
+             this.departamentoAtualAlterar = this.$store.state.departamentos.nome[i];
+             this.descricaoAtualAlterar = this.$store.state.departamentos.descricao[i];
         }
+      }
+    },
+    excluirNaPesquisa(){
+      if(confirm('Tem certeza que deseja excluir este departamento?')){
+        this.$store.state.departamentos.id.splice(this.pesquisaId-1, 1);
+        this.$store.state.departamentos.nome.splice(this.pesquisaId-1, 1);
+        this.$store.state.departamentos.descricao.splice(this.pesquisaId-1, 1);
+        this.pesquisaId = this.pesquisaId-1;
+        this.esconderTabelaPrincipal = true;
+      }else{
+        alert('Operação cancelada');
+			} 
     }
   },
   computed:{
@@ -203,14 +241,20 @@ export default {
   }
 };
 </script>
-
+  
 <style>
-#formularioDepartamento,
-#pesquisa, #excluir, #alterar {
+#tudo{
   font-size: 20px;
 }
 table{
-    width: 100%;
+    width: 70%;
+    font-size: 20px;
+}
+input{
+  width: 295px
+}
+#inputBusca{
+  width: 885px
 }
 </style>
 

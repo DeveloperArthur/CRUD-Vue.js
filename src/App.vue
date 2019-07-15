@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <app-home></app-home>
-    <hr>
+    <br>
       <div id="corpo">
         <router-view></router-view>
       </div>
@@ -20,7 +20,7 @@ export default {
 
 <style>
   header{
-    background: linear-gradient(purple, black);
+    background-color: #0040FF;
     display: flex;
     flex-direction: column;
   }
@@ -30,19 +30,19 @@ export default {
   }
 
   header ul li a:hover {
-    background-color:#D6D6D6;
-    color: #6D6D6D;
+    background-color:#2E9AFE;
+    color: black;
     border-bottom:3px solid #EA0000;
   }
 
   a{
-    font-size: 38px;
-    border: 3px solid white;
+    font-size: 25px;
+    border: 2px solid white;
     color: white
   }
 
   body{
-    background: linear-gradient(white, gray) no-repeat center center fixed;
+    background-color: white;
     font-family: Helvetica, Arial, sans-serif;
     margin: 0;
   }

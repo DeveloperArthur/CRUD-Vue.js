@@ -307,6 +307,6 @@ export default {
         font-size: 20px;
     }
     table{
-        width: 100%;
+        width: 70%;
     }
 </style>
