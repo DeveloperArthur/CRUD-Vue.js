@@ -251,6 +251,10 @@ export default {
             this.$store.state.usuarios.email[i] = this.novoEmail;
             this.$store.state.usuarios.departamento[i] = this.departamentoUsuario;
             alert("Campos alterados");
+            this.novoNome = '';
+            this.novaData = '';
+            this.novoEmail = '';
+            this.departamentoUsuario = '';
             this.mostrarAlterar = true;
           }
         }

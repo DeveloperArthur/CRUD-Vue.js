@@ -200,6 +200,8 @@ export default {
             this.$store.state.departamentos.nome[i] = this.novoDepartamento;
             this.$store.state.departamentos.descricao[i] = this.novaDescricao;
             alert("Campos alterados");
+            this.novoDepartamento = '';
+            this.novaDescricao = '';
             this.mostrarAlterar = true;
           }
         }
